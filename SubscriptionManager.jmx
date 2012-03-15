@@ -32,7 +32,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1331820999000</longProp>
         <longProp name="ThreadGroup.end_time">1331820999000</longProp>
@@ -84,17 +84,18 @@
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="BSF PostProcessor" enabled="true">
+            <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="Get api defs" enabled="true">
               <stringProp name="scriptLanguage">groovy</stringProp>
               <stringProp name="parameters"></stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="script">import groovy.json.JsonSlurper
 
+log.info ctx.previousResult.responseDataAsString
 def apis = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
 
 apis.each { api -&gt;
-    println(api.rel)
-    println(api.href)
+    log.info &quot;API name: &quot; + api.rel
+    log.info &quot;API href: &quot; + api.href 
     vars.put(api.rel, api.href)
 }</stringProp>
             </BSFPostProcessor>
@@ -211,9 +212,11 @@ apis.each { api -&gt;
               <stringProp name="filename"></stringProp>
               <stringProp name="script">import groovy.json.JsonSlurper
 
+log.info ctx.previousResult.responseDataAsString
 def owners = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
 
-vars.put(&quot;organization&quot;, owners[0].key)</stringProp>
+vars.put(&quot;organization&quot;, owners[0].key)
+</stringProp>
             </BSFPostProcessor>
             <hashTree/>
           </hashTree>
@@ -265,15 +268,6 @@ vars.put(&quot;organization&quot;, owners[0].key)</stringProp>
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save Responses to a file" enabled="true">
-              <stringProp name="FileSaver.filename">register</stringProp>
-              <boolProp name="FileSaver.errorsonly">false</boolProp>
-              <boolProp name="FileSaver.skipautonumber">false</boolProp>
-              <boolProp name="FileSaver.skipsuffix">false</boolProp>
-              <boolProp name="FileSaver.successonly">false</boolProp>
-              <stringProp name="FileSaver.variablename">${organization}</stringProp>
-            </ResultSaver>
-            <hashTree/>
             <BSFPreProcessor guiclass="TestBeanGUI" testclass="BSFPreProcessor" testname="BSF PreProcessor" enabled="true">
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters"></stringProp>
@@ -298,8 +292,13 @@ vars.put(&quot;client&quot;, &apos;{&quot;facts&quot;: {&quot;dmi.system.uuid&qu
               <stringProp name="filename"></stringProp>
               <stringProp name="script">import groovy.json.JsonSlurper
 
-//def 
-//println </stringProp>
+def clientInfo = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
+
+log.info &quot;Id:&quot; + clientInfo.idCert.id
+log.info &quot;Certificate: &quot; + clientInfo.idCert.cert
+log.info &quot;Key: &quot; + clientInfo.idCert.key
+
+</stringProp>
             </BSFPostProcessor>
             <hashTree/>
           </hashTree>
