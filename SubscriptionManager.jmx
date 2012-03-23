@@ -604,7 +604,7 @@ if ( ${CLEAN_KATELLO_FULL} ) {
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="false">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -633,7 +633,7 @@ if ( ${CLEAN_KATELLO_FULL} ) {
             <bytes>true</bytes>
           </value>
         </objProp>
-        <stringProp name="filename"></stringProp>
+        <stringProp name="filename">/tmp/SubscriptionManagerResultsTree</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="false">
@@ -731,15 +731,6 @@ if ( ${CLEAN_KATELLO_FULL} ) {
         </objProp>
         <stringProp name="filename"></stringProp>
       </ResultCollector>
-      <hashTree/>
-      <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save Responses to a file" enabled="true">
-        <stringProp name="FileSaver.filename">/tmp/SubscriptionManagerTest_</stringProp>
-        <boolProp name="FileSaver.errorsonly">false</boolProp>
-        <boolProp name="FileSaver.skipautonumber">false</boolProp>
-        <boolProp name="FileSaver.skipsuffix">false</boolProp>
-        <boolProp name="FileSaver.successonly">false</boolProp>
-        <stringProp name="FileSaver.variablename">FILENAME</stringProp>
-      </ResultSaver>
       <hashTree/>
     </hashTree>
   </hashTree>
