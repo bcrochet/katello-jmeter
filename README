@@ -1,0 +1,1 @@
+Change the user.classpath in jmeter.properties to include the Groovy embedded jar.
