@@ -633,7 +633,7 @@ if ( ${CLEAN_KATELLO_FULL} ) {
             <bytes>true</bytes>
           </value>
         </objProp>
-        <stringProp name="filename">/tmp/SubscriptionManagerResultsTree</stringProp>
+        <stringProp name="filename">/tmp/SubscriptionManagerResultsTree.jtl</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="false">
