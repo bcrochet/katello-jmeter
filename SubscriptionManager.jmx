@@ -226,7 +226,7 @@ apis.each { api -&gt;
             <boolProp name="UserParameters.per_iteration">false</boolProp>
           </UserParameters>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="users/admin/owners" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get a list of owner orgs" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -280,20 +280,8 @@ vars.put(&quot;organization&quot;, owners[0].key)
 </stringProp>
             </BSFPostProcessor>
             <hashTree/>
-            <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
-              <collectionProp name="AuthManager.auth_list">
-                <elementProp name="" elementType="Authorization">
-                  <stringProp name="Authorization.url">${protocol}://${server}:${port}/${path}/api</stringProp>
-                  <stringProp name="Authorization.username">admin</stringProp>
-                  <stringProp name="Authorization.password">admin</stringProp>
-                  <stringProp name="Authorization.domain"></stringProp>
-                  <stringProp name="Authorization.realm"></stringProp>
-                </elementProp>
-              </collectionProp>
-            </AuthManager>
-            <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="consumers?owner=:organization" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Register to MyOrg" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments">
@@ -385,20 +373,8 @@ uuids &lt;&lt; clientInfo.uuid
 </stringProp>
             </BSFPostProcessor>
             <hashTree/>
-            <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
-              <collectionProp name="AuthManager.auth_list">
-                <elementProp name="" elementType="Authorization">
-                  <stringProp name="Authorization.url">${protocol}://${server}:${port}/${path}/api</stringProp>
-                  <stringProp name="Authorization.username">admin</stringProp>
-                  <stringProp name="Authorization.password">admin</stringProp>
-                  <stringProp name="Authorization.domain"></stringProp>
-                  <stringProp name="Authorization.realm"></stringProp>
-                </elementProp>
-              </collectionProp>
-            </AuthManager>
-            <hashTree/>
           </hashTree>
-          <BSFSampler guiclass="TestBeanGUI" testclass="BSFSampler" testname="consumers/:id/packages" enabled="true">
+          <BSFSampler guiclass="TestBeanGUI" testclass="BSFSampler" testname="Upload package list" enabled="true">
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">// TODO: Generate package list?
@@ -475,6 +451,80 @@ vars.put(&quot;certfile&quot;, certfile)</stringProp>
             </BSFPreProcessor>
             <hashTree/>
           </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Choose a subscription" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/${path}${pools}</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.monitor">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="Pick one" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">import groovy.json.JsonSlurper
+
+def poolInfo = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
+
+pool =  poolInfo*.id[new Random().nextInt(poolInfo.size)]
+
+vars.put(&quot;pool_id&quot;, pool)</stringProp>
+            </BSFPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <BSFSampler guiclass="TestBeanGUI" testclass="BSFSampler" testname="Consume a subscription" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">8a90f80b36127bcc013612810f830020
+
+// Since there are args with a space, using the List of strings version for execution
+def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;, &quot;-d&quot;, &quot;&quot;&quot;&apos;pool=${pool_id}&apos;&quot;&quot;&quot;, &quot;${protocol}://${server}:${port}/${path}${consumers}${uuid}/entitlements&quot; ]
+log.info &quot;Command to run: ${command}&quot;
+def proc = command.execute()
+proc.waitFor()
+if ( proc.exitValue() ) {
+    SampleResult.successful = false
+    SampleResult.responseCode = proc.exitValue() 
+    SampleResult.responseMessage = &quot;FAILED&quot; 
+    SampleResult.samplerData = proc.err.text
+} else {
+    SampleResult.successful = true
+    SampleResult.responseCode = &quot;200&quot; 
+    SampleResult.responseMessage = &quot;OK&quot; 
+    SampleResult.samplerData = proc.text
+}
+
+//log.info proc.text
+//log.info proc.err.text
+</stringProp>
+          </BSFSampler>
+          <hashTree/>
+          <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
+            <collectionProp name="AuthManager.auth_list">
+              <elementProp name="" elementType="Authorization">
+                <stringProp name="Authorization.url">${protocol}://${server}:${port}/${path}/api</stringProp>
+                <stringProp name="Authorization.username">admin</stringProp>
+                <stringProp name="Authorization.password">admin</stringProp>
+                <stringProp name="Authorization.domain"></stringProp>
+                <stringProp name="Authorization.realm"></stringProp>
+              </elementProp>
+            </collectionProp>
+          </AuthManager>
+          <hashTree/>
         </hashTree>
       </hashTree>
       <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
