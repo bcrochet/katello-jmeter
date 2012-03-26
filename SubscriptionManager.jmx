@@ -42,6 +42,11 @@
             <stringProp name="Argument.value">${__P(katello.server,localhost)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="RESULTS_FILE" elementType="Argument">
+            <stringProp name="Argument.name">RESULTS_FILE</stringProp>
+            <stringProp name="Argument.value">${__P(results_file,SubscriptionManagerResultsTree.jtl)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -633,7 +638,7 @@ if ( ${CLEAN_KATELLO_FULL} ) {
             <bytes>true</bytes>
           </value>
         </objProp>
-        <stringProp name="filename">/tmp/SubscriptionManagerResultsTree.jtl</stringProp>
+        <stringProp name="filename">${RESULTS_FILE}</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="false">
