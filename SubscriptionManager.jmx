@@ -47,6 +47,11 @@
             <stringProp name="Argument.value">${__P(results_file,SubscriptionManagerResultsTree.jtl)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="KATELLO_PATH" elementType="Argument">
+            <stringProp name="Argument.name">KATELLO_PATH</stringProp>
+            <stringProp name="Argument.value">${__P(katello.path,katello)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -315,7 +320,7 @@ if ( ${CLEAN_KATELLO_FULL} ) {
           </elementProp>
           <elementProp name="path" elementType="Argument">
             <stringProp name="Argument.name">path</stringProp>
-            <stringProp name="Argument.value">katello</stringProp>
+            <stringProp name="Argument.value">${KATELLO_PATH}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
