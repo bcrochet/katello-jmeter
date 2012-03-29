@@ -86,6 +86,15 @@ props.put(&quot;base.run.dir&quot;, dir)
 </stringProp>
         </BSFSampler>
         <hashTree/>
+        <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Get API URIs" enabled="true">
+          <collectionProp name="ModuleController.node_path">
+            <stringProp name="-1227702913">WorkBench</stringProp>
+            <stringProp name="764597751">Test Plan</stringProp>
+            <stringProp name="170071582">Test Fragment</stringProp>
+            <stringProp name="-2131753801">Get API URIs</stringProp>
+          </collectionProp>
+        </ModuleController>
+        <hashTree/>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -102,18 +111,6 @@ props.put(&quot;base.run.dir&quot;, dir)
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller" enabled="true"/>
-        <hashTree>
-          <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Get API URIs" enabled="true">
-            <collectionProp name="ModuleController.node_path">
-              <stringProp name="-1227702913">WorkBench</stringProp>
-              <stringProp name="764597751">Test Plan</stringProp>
-              <stringProp name="170071582">Test Fragment</stringProp>
-              <stringProp name="-2131753801">Get API URIs</stringProp>
-            </collectionProp>
-          </ModuleController>
-          <hashTree/>
-        </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Registration Controller" enabled="true"/>
         <hashTree>
           <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Get list of owner orgs" enabled="true">
@@ -556,7 +553,7 @@ def apis = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
 apis.each { api -&gt;
     log.info &quot;API name: &quot; + api.rel
     log.info &quot;API href: &quot; + api.href 
-    vars.put(api.rel, api.href)
+    props.put(api.rel, api.href)
 }</stringProp>
             </BSFPostProcessor>
             <hashTree/>
@@ -581,7 +578,7 @@ apis.each { api -&gt;
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-            <stringProp name="HTTPSampler.path">/${path}${consumers}?owner=${organization}</stringProp>
+            <stringProp name="HTTPSampler.path">/${path}${__P(consumers)}?owner=${organization}</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -615,9 +612,10 @@ apis.each { api -&gt;
             <BSFPreProcessor guiclass="TestBeanGUI" testclass="BSFPreProcessor" testname="set client facts" enabled="true">
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters"></stringProp>
-              <stringProp name="script">def hostname_random = vars.get(&quot;HOSTNAME_RANDOM&quot;)
-def hostname = &quot;${hostname_random}.example.com&quot;
+              <stringProp name="script">//def hostname_random = vars.get(&quot;HOSTNAME_RANDOM&quot;)
+//def hostname = &quot;${hostname_random}.example.com&quot;
 def uuid = java.util.UUID.randomUUID()
+def hostname = &quot;${uuid}.example.com&quot;
 
 vars.put(&quot;client&quot;, &apos;{&quot;facts&quot;: {&quot;dmi.system.uuid&quot;: &quot;&apos; + uuid + &apos;&quot;, &quot;lscpu.l1d_cache&quot;: &quot;32K&quot;, &quot;distribution.name&quot;: &quot;Red Hat Enterprise Linux Server&quot;, &quot;dmi.bios.address&quot;: &quot;0xe8000&quot;, &quot;distribution.id&quot;: &quot;Santiago&quot;, &quot;dmi.processor.family&quot;: &quot;Other&quot;, &quot;system.entitlements_valid&quot;: true, &quot;dmi.chassis.manufacturer&quot;: &quot;Red Hat&quot;, &quot;dmi.memory.bank_locator&quot;: &quot;Not Specified&quot;, &quot;lscpu.numa_node(s)&quot;: &quot;1&quot;, &quot;virt.host_type&quot;: &quot;kvm&quot;, &quot;lscpu.l1i_cache&quot;: &quot;32K&quot;, &quot;lscpu.vendor_id&quot;: &quot;GenuineIntel&quot;, &quot;virt.is_guest&quot;: true, &quot;dmi.chassis.security_status&quot;: &quot;Unknown&quot;, &quot;uname.sysname&quot;: &quot;Linux&quot;, &quot;dmi.processor.type&quot;: &quot;Central Processor&quot;, &quot;lscpu.hypervisor_vendor&quot;: &quot;KVM&quot;, &quot;lscpu.cpu_op-mode(s)&quot;: &quot;32-bit, 64-bit&quot;, &quot;dmi.processor.socket_designation&quot;: &quot;CPU 1&quot;, &quot;dmi.system.family&quot;: &quot;Red Hat Enterprise Linux&quot;, &quot;cpu.core(s)_per_socket&quot;: 1, &quot;distribution.version&quot;: &quot;6.2&quot;, &quot;dmi.bios.vendor&quot;: &quot;Seabios&quot;, &quot;dmi.bios.bios_revision&quot;: &quot;1.0&quot;, &quot;dmi.system.version&quot;: &quot;RHEL 6.2.0 PC&quot;, &quot;net.interface.lo.ipaddr&quot;: &quot;127.0.0.1&quot;, &quot;net.interface.lo.broadcast&quot;: &quot;0.0.0.0&quot;, &quot;dmi.chassis.type&quot;: &quot;Other&quot;, &quot;dmi.chassis.serial_number&quot;: &quot;Not Specified&quot;, &quot;dmi.chassis.power_supply_state&quot;: &quot;Safe&quot;, &quot;lscpu.bogomips&quot;: &quot;4266.86&quot;, &quot;dmi.chassis.lock&quot;: &quot;Not Present&quot;, &quot;lscpu.thread(s)_per_core&quot;: &quot;1&quot;, &quot;dmi.system.serial_number&quot;: &quot;Not Specified&quot;, &quot;dmi.chassis.boot-up_state&quot;: &quot;Safe&quot;, &quot;dmi.processor.status&quot;: &quot;Populated:Enabled&quot;, &quot;lscpu.on-line_cpu(s)_list&quot;: &quot;0&quot;, &quot;dmi.memory.locator&quot;: &quot;DIMM 0&quot;, &quot;lscpu.cpu_socket(s)&quot;: &quot;1&quot;, &quot;dmi.chassis.asset_tag&quot;: &quot;Not Specified&quot;, &quot;dmi.system.status&quot;: &quot;No errors detected&quot;, &quot;dmi.chassis.version&quot;: &quot;Not Specified&quot;, &quot;uname.machine&quot;: &quot;x86_64&quot;, &quot;dmi.memory.location&quot;: &quot;Other&quot;, &quot;cpu.cpu(s)&quot;: 1, &quot;network.hostname&quot;: &quot;&apos; + hostname + &apos;&quot;, &quot;dmi.system.manufacturer&quot;: &quot;Red Hat&quot;, &quot;uname.version&quot;: &quot;#1 SMP Wed Nov 9 08:03:13 EST 2011&quot;, &quot;dmi.memory.use&quot;: &quot;System Memory&quot;, &quot;lscpu.cpu(s)&quot;: &quot;1&quot;, &quot;dmi.processor.upgrade&quot;: &quot;Other&quot;, &quot;lscpu.byte_order&quot;: &quot;Little Endian&quot;, &quot;network.ipaddr&quot;: &quot;127.0.0.1&quot;, &quot;memory.memtotal&quot;: &quot;1020848&quot;, &quot;dmi.bios.version&quot;: &quot;0.5.1&quot;, &quot;dmi.memory.data_width&quot;: &quot;64 bit&quot;, &quot;dmi.bios.runtime_size&quot;: &quot;96 KB&quot;, &quot;lscpu.cpu_family&quot;: &quot;6&quot;, &quot;net.interface.eth0.ipaddr&quot;: &quot;10.10.10.1&quot;, &quot;dmi.memory.speed&quot;: &quot;  (ns)&quot;, &quot;lscpu.virtualization_type&quot;: &quot;full&quot;, &quot;net.interface.eth0.netmask&quot;: &quot;255.255.255.0&quot;, &quot;dmi.chassis.thermal_state&quot;: &quot;Safe&quot;, &quot;dmi.memory.total_width&quot;: &quot;64 bit&quot;, &quot;lscpu.numa_node0_cpu(s)&quot;: &quot;0&quot;, &quot;lscpu.architecture&quot;: &quot;x86_64&quot;, &quot;lscpu.model&quot;: &quot;13&quot;, &quot;dmi.memory.maximum_capacity&quot;: &quot;1 GB&quot;, &quot;dmi.memory.error_correction_type&quot;: &quot;Multi-bit ECC&quot;, &quot;lscpu.core(s)_per_socket&quot;: &quot;1&quot;, &quot;lscpu.cpu_mhz&quot;: &quot;2133.434&quot;, &quot;dmi.system.product_name&quot;: &quot;KVM&quot;, &quot;dmi.processor.version&quot;: &quot;Not Specified&quot;, &quot;dmi.memory.form_factor&quot;: &quot;DIMM&quot;, &quot;memory.swaptotal&quot;: &quot;1822712&quot;, &quot;net.interface.eth0.hwaddr&quot;: &quot;52:54:00:FF:FF:FF&quot;, &quot;dmi.bios.rom_size&quot;: &quot;64 KB&quot;, &quot;dmi.memory.type&quot;: &quot;RAM&quot;, &quot;lscpu.stepping&quot;: &quot;3&quot;, &quot;net.interface.lo.netmask&quot;: &quot;255.0.0.0&quot;, &quot;dmi.processor.voltage&quot;: &quot; &quot;, &quot;dmi.memory.size&quot;: &quot;1024 MB&quot;, &quot;dmi.bios.relase_date&quot;: &quot;01/01/2007&quot;, &quot;virt.uuid&quot;: &quot;&apos; + uuid + &apos;&quot;, &quot;net.interface.eth0.broadcast&quot;: &quot;10.10.10.255&quot;, &quot;dmi.memory.error_information_handle&quot;: &quot;Not Provided&quot;, &quot;uname.nodename&quot;: &quot;&apos; + hostname + &apos;&quot;, &quot;net.interface.lo.hwaddr&quot;: &quot;00:00:00:00:00:00&quot;, &quot;dmi.memory.array_handle&quot;: &quot;0x1000&quot;, &quot;dmi.system.sku_number&quot;: &quot;Not Specified&quot;, &quot;uname.release&quot;: &quot;2.6.32-220.el6.x86_64&quot;, &quot;lscpu.l2_cache&quot;: &quot;4096K&quot;, &quot;dmi.system.wake-up_type&quot;: &quot;Power Switch&quot;, &quot;cpu.cpu_socket(s)&quot;: 1}, &quot;type&quot;: &quot;system&quot;, &quot;name&quot;: &quot;&apos; + hostname + &apos;&quot;}&apos;)</stringProp>
               <stringProp name="scriptLanguage">groovy</stringProp>
@@ -670,7 +668,7 @@ uuids &lt;&lt; clientInfo.uuid
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-            <stringProp name="HTTPSampler.path">/${path}${users}admin/owners</stringProp>
+            <stringProp name="HTTPSampler.path">/${path}${__P(users)}admin/owners</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -724,7 +722,7 @@ vars.put(&quot;organization&quot;, owners[0].key)
             <stringProp name="script">// TODO: Generate package list?
 
 // Since there are args with a space, using the List of strings version for execution
-def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;PUT&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;, &quot;-d&quot;, &quot;&quot;&quot;&apos;${packages}&apos;&quot;&quot;&quot;, &quot;${protocol}://${server}:${port}/${path}${consumers}${uuid}/packages&quot; ]
+def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;PUT&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;, &quot;-d&quot;, &quot;&quot;&quot;&apos;${packages}&apos;&quot;&quot;&quot;, &quot;${protocol}://${server}:${port}/${path}${__P(consumers)}${uuid}/packages&quot; ]
 log.info &quot;Command to run: ${command}&quot;
 def proc = command.execute()
 proc.waitFor()
@@ -840,7 +838,7 @@ vars.put(&quot;pool_id&quot;, pool)</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="script">// Since there are args with a space, using the List of strings version for execution
-def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;, &quot;-d&quot;, &quot;&quot;&quot;&apos;pool=${pool_id}&apos;&quot;&quot;&quot;, &quot;${protocol}://${server}:${port}/${path}${consumers}${uuid}/entitlements&quot; ]
+def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;, &quot;-d&quot;, &quot;&quot;&quot;&apos;pool=${pool_id}&apos;&quot;&quot;&quot;, &quot;${protocol}://${server}:${port}/${path}${__P(consumers)}${uuid}/entitlements&quot; ]
 log.info &quot;Command to run: ${command}&quot;
 def proc = command.execute()
 proc.waitFor()
