@@ -163,6 +163,24 @@ props.put(&quot;base.run.dir&quot;, dir)
             </collectionProp>
           </ModuleController>
           <hashTree/>
+          <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Clean thread" enabled="true"/>
+          <hashTree>
+            <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="Clear vars" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">[ &quot;uuid&quot;, &quot;cert&quot;, &quot;key&quot;, &quot;clientInfo&quot;, &quot;organization&quot;, &quot;packages&quot;, &quot;keyfile&quot;, &quot;certfile&quot;, &quot;pool_id&quot;, &quot;client&quot; ].each { var -&gt;
+    vars.remove(var)
+}</stringProp>
+            </BSFPostProcessor>
+            <hashTree/>
+            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+              <boolProp name="displayJMeterProperties">false</boolProp>
+              <boolProp name="displayJMeterVariables">false</boolProp>
+              <boolProp name="displaySystemProperties">false</boolProp>
+            </DebugSampler>
+            <hashTree/>
+          </hashTree>
         </hashTree>
         <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
           <collectionProp name="AuthManager.auth_list">
