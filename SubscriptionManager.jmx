@@ -553,7 +553,7 @@ if ( ${CLEAN_KATELLO_FULL} ) {
               <stringProp name="script">import groovy.json.JsonSlurper
 
 log.info ctx.previousResult.responseDataAsString
-def apis = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
+def apis = new JsonSlurper().parseText(prev.responseDataAsString)
 
 apis.each { api -&gt;
 //    log.info &quot;API name: &quot; + api.rel
@@ -630,7 +630,7 @@ vars.put(&quot;client&quot;, &apos;{&quot;facts&quot;: {&quot;dmi.system.uuid&qu
               <stringProp name="filename"></stringProp>
               <stringProp name="script">import groovy.json.JsonSlurper
 
-def clientInfo = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
+def clientInfo = new JsonSlurper().parseText(prev.responseDataAsString)
 log.info &quot;Registration complete. Getting certificates&quot;
 //log.info &quot;clientInfo: ${clientInfo}&quot;
 //log.info &quot;uuid: ${clientInfo.uuid}&quot;
@@ -700,7 +700,7 @@ uuids &lt;&lt; clientInfo.uuid
               <stringProp name="script">import groovy.json.JsonSlurper
 
 //log.info ctx.previousResult.responseDataAsString
-def owners = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
+def owners = new JsonSlurper().parseText(prev.responseDataAsString)
 
 vars.put(&quot;organization&quot;, owners[0].key)
 </stringProp>
@@ -816,7 +816,7 @@ vars.put(&quot;certfile&quot;, certfile)</stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="script">import groovy.json.JsonSlurper
 
-def poolInfo = new JsonSlurper().parseText(ctx.previousResult.responseDataAsString)
+def poolInfo = new JsonSlurper().parseText(prev.responseDataAsString)
 
 pool =  poolInfo*.id[new Random().nextInt(poolInfo.size)]
 
