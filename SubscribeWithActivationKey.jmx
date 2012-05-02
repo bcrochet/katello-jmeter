@@ -195,70 +195,6 @@ props.put(&quot;base.run.dir&quot;, dir)
         </AuthManager>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="false">
-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">1</stringProp>
-        </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
-        <longProp name="ThreadGroup.start_time">1332791221000</longProp>
-        <longProp name="ThreadGroup.end_time">1332791221000</longProp>
-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="ThreadGroup.duration"></stringProp>
-        <stringProp name="ThreadGroup.delay"></stringProp>
-      </ThreadGroup>
-      <hashTree>
-        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller" enabled="true"/>
-        <hashTree>
-          <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Get API URIs" enabled="true">
-            <collectionProp name="ModuleController.node_path">
-              <stringProp name="-1227702913">WorkBench</stringProp>
-              <stringProp name="764597751">Test Plan</stringProp>
-              <stringProp name="170071582">Test Fragment</stringProp>
-              <stringProp name="-2131753801">Get API URIs</stringProp>
-            </collectionProp>
-          </ModuleController>
-          <hashTree/>
-          <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Module Controller" enabled="true">
-            <collectionProp name="ModuleController.node_path">
-              <stringProp name="-1227702913">WorkBench</stringProp>
-              <stringProp name="764597751">Test Plan</stringProp>
-              <stringProp name="170071582">Test Fragment</stringProp>
-              <stringProp name="1927307885">Get list of owner orgs</stringProp>
-            </collectionProp>
-          </ModuleController>
-          <hashTree/>
-          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-            <boolProp name="LoopController.continue_forever">true</boolProp>
-            <stringProp name="LoopController.loops">20</stringProp>
-          </LoopController>
-          <hashTree>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Register to ${organization}" enabled="true">
-              <collectionProp name="ModuleController.node_path">
-                <stringProp name="-1227702913">WorkBench</stringProp>
-                <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="170071582">Test Fragment</stringProp>
-                <stringProp name="-1474318581">Register to ${organization}</stringProp>
-              </collectionProp>
-            </ModuleController>
-            <hashTree/>
-          </hashTree>
-        </hashTree>
-        <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
-          <collectionProp name="AuthManager.auth_list">
-            <elementProp name="" elementType="Authorization">
-              <stringProp name="Authorization.url">${protocol}://${server}:${port}/${path}/api</stringProp>
-              <stringProp name="Authorization.username">admin</stringProp>
-              <stringProp name="Authorization.password">admin</stringProp>
-              <stringProp name="Authorization.domain"></stringProp>
-              <stringProp name="Authorization.realm"></stringProp>
-            </elementProp>
-          </collectionProp>
-        </AuthManager>
-        <hashTree/>
-      </hashTree>
       <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -522,7 +458,7 @@ vars.put(&quot;client&quot;, &apos;{&quot;facts&quot;: {&quot;dmi.system.uuid&qu
               <stringProp name="filename"></stringProp>
               <stringProp name="script">import groovy.json.JsonSlurper
 
-def response = &quot;&quot;&quot;curl -k --user admin:admin -H &quot;Content-Type: application/json&quot; https://qe-blade-02.idm.lab.bos.redhat.com/katello/api/organizations/${organization}/activation_keys/&quot;&quot;&quot;.execute().text
+def response = &quot;&quot;&quot;curl -k --user admin:admin -H &quot;Content-Type: application/json&quot; ${protocol}://${server}:${port}/${path}${__P(organizations)}/${organization}/activation_keys/&quot;&quot;&quot;.execute().text
 
 def keys = new JsonSlurper().parseText(response)
 def activation_key = keys[0].name
