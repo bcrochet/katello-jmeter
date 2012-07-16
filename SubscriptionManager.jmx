@@ -601,7 +601,7 @@ apis.each { api -&gt;
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-            <stringProp name="HTTPSampler.path">/${path}${__P(consumers)}?owner=${organization}</stringProp>
+            <stringProp name="HTTPSampler.path">/${path}${__P(consumers)}?owner=${organization}&amp;</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -850,7 +850,7 @@ vars.put(&quot;pool_id&quot;, pool)</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="script">// Since there are args with a space, using the List of strings version for execution
-def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;, &quot;-d&quot;, &quot;&quot;&quot;&apos;pool=${pool_id}&apos;&quot;&quot;&quot;, &quot;${protocol}://${server}:${port}/${path}${__P(consumers)}${uuid}/entitlements&quot; ]
+def command = [&quot;curl&quot;, &quot;-k&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;-H&quot;, &quot;Content-Type: application/json&quot;, &quot;--key&quot;, &quot;${keyfile}&quot;, &quot;--cert&quot;, &quot;${certfile}&quot;,  &quot;${protocol}://${server}:${port}/${path}${__P(consumers)}${uuid}/entitlements?pool=${pool_id}&quot; ]
 //log.info &quot;Command to run: ${command}&quot;
 def proc = command.execute()
 proc.waitFor()
